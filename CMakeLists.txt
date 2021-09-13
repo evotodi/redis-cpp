@@ -27,7 +27,7 @@ endif()
 
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-
+set (PACKAGING_TEMPLATES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/packaging")
 set (CMAKE_CXX_EXTENSIONS OFF)
 
 #---------------------------------------------------------
@@ -120,6 +120,12 @@ if (NOT REDISCPP_HEADER_ONLY)
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
 endif()
+
+set(PKG_CONFIG_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc")
+configure_file("${PACKAGING_TEMPLATES_DIR}/pkgconfig.pc.in" "${PKG_CONFIG_FILE_NAME}" @ONLY)
+install(FILES "${PKG_CONFIG_FILE_NAME}"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+        )
 
 install(
     EXPORT ${PROJECT_LC}-targets
